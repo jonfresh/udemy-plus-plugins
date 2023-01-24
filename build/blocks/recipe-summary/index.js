@@ -294,9 +294,19 @@ __webpack_require__.r(__webpack_exports__);
       postId
     } = context;
     const [termIDs] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_6__.useEntityProp)('postType', 'recipe', 'cuisine', postId);
-    (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_7__.useSelect)(() => {
-      console.log('useSelect Called');
+    const {
+      cuisines
+    } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_7__.useSelect)(select => {
+      const {
+        getEntityRecords
+      } = select('core');
+      return {
+        cuisines: getEntityRecords('taxonomy', 'cuisine', {
+          include: termIDs
+        })
+      };
     }, [termIDs]);
+    console.log(cuisines);
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
       className: "bi bi-alarm"
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
