@@ -137,6 +137,16 @@ module.exports = window["wp"]["blocks"];
 
 /***/ }),
 
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
 /***/ "@wordpress/core-data":
 /*!**********************************!*\
   !*** external ["wp","coreData"] ***!
@@ -266,6 +276,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__);
+
 
 
 
@@ -295,15 +308,19 @@ __webpack_require__.r(__webpack_exports__);
     } = context;
     const [termIDs] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_6__.useEntityProp)('postType', 'recipe', 'cuisine', postId);
     const {
-      cuisines
+      cuisines,
+      isLoading
     } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_7__.useSelect)(select => {
       const {
-        getEntityRecords
+        getEntityRecords,
+        isResolving
       } = select('core');
+      const taxonomyArgs = ['taxonomy', 'cuisine', {
+        include: termIDs
+      }];
       return {
-        cuisines: getEntityRecords('taxonomy', 'cuisine', {
-          include: termIDs
-        })
+        cuisines: getEntityRecords(...taxonomyArgs),
+        isLoading: isResolving('getEntityRecords,', taxonomyArgs)
       };
     }, [termIDs]);
     console.log(cuisines);
@@ -360,7 +377,7 @@ __webpack_require__.r(__webpack_exports__);
       className: "recipe-title"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Cuisine', 'udemy-plus')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "recipe-data recipe-cuisine"
-    }, cuisines && cuisines.map((item, index) => {
+    }, isLoading && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__.Spinner, null), !isLoading && cuisines && cuisines.map((item, index) => {
       const comma = cuisines[index + 1] ? ',' : '';
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
         href: item.meta.more_info_url

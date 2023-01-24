@@ -5,6 +5,7 @@ import icons from '../../icons.js';
 import './main.css';
 import { useEntityProp } from '@wordpress/core-data'; 
 import { useSelect } from '@wordpress/data'; 
+import { Spinner } from '@wordpress/components';
 
 registerBlockType('udemy-plus/recipe-summary', {
   icon: {
@@ -17,13 +18,18 @@ registerBlockType('udemy-plus/recipe-summary', {
 
     const [termIDs] = useEntityProp('postType', 'recipe', 'cuisine', postId)
 
-    const {cuisines} = useSelect((select) => {
-      const { getEntityRecords } = select('core')
+    const { cuisines, isLoading } = useSelect((select) => {
+      const { getEntityRecords, isResolving } = select('core')
+
+      const taxonomyArgs = [
+        'taxonomy', 'cuisine', {
+          include: termIDs
+        }
+      ]
 
       return {
-        cuisines: getEntityRecords('taxonomy', 'cuisine', {
-          include: termIDs
-        })
+        cuisines: getEntityRecords(...taxonomyArgs),
+        isLoading: isResolving('getEntityRecords,', taxonomyArgs)
       }
     }, [termIDs])
 
@@ -74,7 +80,11 @@ registerBlockType('udemy-plus/recipe-summary', {
                 <div className="recipe-title">{__('Cuisine', 'udemy-plus')}</div>
                 <div className="recipe-data recipe-cuisine">
                   {
-                    cuisines && cuisines.map((item, index) => {
+                    isLoading && 
+                    <Spinner />
+                  }
+                  {
+                    !isLoading && cuisines && cuisines.map((item, index) => {
                       const comma = cuisines[index + 1] ? ',' : ''  
 
                       return (
