@@ -4,6 +4,7 @@ import { __ } from '@wordpress/i18n';
 import icons from '../../icons.js';
 import './main.css';
 import { useEntityProp } from '@wordpress/core-data'; 
+import { useSelect } from '@wordpress/data'; 
 
 registerBlockType('udemy-plus/recipe-summary', {
   icon: {
@@ -16,7 +17,10 @@ registerBlockType('udemy-plus/recipe-summary', {
 
     const [termIDs] = useEntityProp('postType', 'recipe', 'cuisine', postId)
 
-    console.log(termIDs)
+    useSelect(() => {
+      console.log('useSelect Called')
+    }, [termIDs])
+
 
     return (
       <>
